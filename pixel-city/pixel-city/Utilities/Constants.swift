@@ -8,3 +8,6 @@
 
 import Foundation
 
+// Sizes
+let PULL_UP_VIEW_LBL_WIDTH          =   250.0
+let PULL_UP_VIEW_LBL_HEIGHT         =   40.0
