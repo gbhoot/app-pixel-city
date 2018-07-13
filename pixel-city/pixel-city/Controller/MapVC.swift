@@ -36,7 +36,10 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        // Delegats
+        // Notifications
+        NotificationCenter.default.addObserver(self, selector: #selector(MapVC.updateProgressLblText), name: NOTIF_PHOTO_DOWNLOADED, object: nil)
+        
+        // Delegates
         mapView.delegate = self
         locationManager.delegate = self
         configureLocationServices()
@@ -58,6 +61,7 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
     
     @objc func animateViewDown() {
         removeOutletInstances()
+        PhotoService.instance.cancelAllSessions()
         pullUpViewHeight.constant = 0
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
@@ -95,7 +99,7 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         progressLbl?.font = UIFont(name: AVENIR_FONT, size: 18)
         progressLbl?.textColor = #colorLiteral(red: 0.06274510175, green: 0, blue: 0.1921568662, alpha: 1)
         progressLbl?.textAlignment = .center
-        progressLbl?.text = "12/\(NUM_OF_PHOTOS) PHOTOS LOADED"
+        updateProgressLblText()
 
         pullUpView.addSubview(progressLbl!)
     }
@@ -112,9 +116,21 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: ID_PHOTO_CELL)
         collectionView?.delegate = self
         collectionView?.dataSource = self
-        collectionView?.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+        collectionView?.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         
         pullUpView.addSubview(collectionView!)
+        collectionView?.reloadData()
+    }
+    
+    @objc func updateProgressLblText() {
+        let photo_num = PhotoService.instance.imageArray.count
+        progressLbl?.text = "\(photo_num)/\(NUM_OF_PHOTOS) PHOTOS DOWNLOADED"
+    }
+    
+    func updateCollectionView() {
+        PhotoService.instance.photoURLArray.removeAll()
+        PhotoService.instance.imageArray.removeAll()
+        collectionView?.reloadData()
     }
     
     func removeSpinner() {
@@ -129,6 +145,13 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         if progressLbl != nil {
             pullUpView.willRemoveSubview(progressLbl!)
             progressLbl?.removeFromSuperview()
+        }
+    }
+    
+    func removeCollectionView() {
+        if collectionView != nil {
+            pullUpView.willRemoveSubview(collectionView!)
+            collectionView?.removeFromSuperview()
         }
     }
     
@@ -173,8 +196,11 @@ extension MapVC: MKMapViewDelegate {
         
         PhotoService.instance.getURLs(forAnnotation: annotation) { (success) in
             if success {
-                print(PhotoService.instance.photoURLArray)
-//                self.addCollectionView()
+                PhotoService.instance.retrieveImages(handler: { (success) in
+                    if success {
+                        self.addCollectionView()
+                    }
+                })
             } else {
                 
             }
@@ -184,13 +210,14 @@ extension MapVC: MKMapViewDelegate {
     }
     
     func addOutletInstance() {
+        updateCollectionView()
         addSwipe()
         addSpinner()
         addProgressLbl()
-//        addCollectionView()
     }
     
     func removeOutletInstances() {
+        PhotoService.instance.cancelAllSessions()
         removePin()
         removeSpinner()
         removeProgressLbl()
@@ -230,13 +257,16 @@ extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // number of items (photos)
-        return 4
+        return PhotoService.instance.imageArray.count
     }
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ID_PHOTO_CELL, for: indexPath) as? PhotoCell
-        return cell!
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ID_PHOTO_CELL, for: indexPath) as? PhotoCell else { return UICollectionViewCell() }
+        let imageFromIndex = PhotoService.instance.imageArray[indexPath.row]
+        let imageView = UIImageView(image: imageFromIndex)
+        cell.addSubview(imageView)
+        return cell
     }
 }
 
