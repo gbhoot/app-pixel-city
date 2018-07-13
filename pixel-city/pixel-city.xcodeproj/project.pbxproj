@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		02690B8020F91D320040C5FD /* PhotoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02690B7F20F91D320040C5FD /* PhotoService.swift */; };
+		02690B8220F942AE0040C5FD /* PopVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02690B8120F942AE0040C5FD /* PopVC.swift */; };
 		027F882320F81B8000B3570C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027F882220F81B8000B3570C /* AppDelegate.swift */; };
 		027F882520F81B8000B3570C /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027F882420F81B8000B3570C /* MapVC.swift */; };
 		027F882820F81B8000B3570C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 027F882620F81B8000B3570C /* Main.storyboard */; };
@@ -21,6 +22,7 @@
 
 /* Begin PBXFileReference section */
 		02690B7F20F91D320040C5FD /* PhotoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoService.swift; sourceTree = "<group>"; };
+		02690B8120F942AE0040C5FD /* PopVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopVC.swift; sourceTree = "<group>"; };
 		027F881F20F81B8000B3570C /* pixel-city.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "pixel-city.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		027F882220F81B8000B3570C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		027F882420F81B8000B3570C /* MapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVC.swift; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				027F882420F81B8000B3570C /* MapVC.swift */,
+				02690B8120F942AE0040C5FD /* PopVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -264,6 +267,7 @@
 			files = (
 				027F882520F81B8000B3570C /* MapVC.swift in Sources */,
 				0292636B20F84B4300693E65 /* PhotoCell.swift in Sources */,
+				02690B8220F942AE0040C5FD /* PopVC.swift in Sources */,
 				02690B8020F91D320040C5FD /* PhotoService.swift in Sources */,
 				0292636920F82EEE00693E65 /* DroppablePin.swift in Sources */,
 				027F882320F81B8000B3570C /* AppDelegate.swift in Sources */,

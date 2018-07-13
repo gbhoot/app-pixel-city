@@ -25,6 +25,7 @@ let URL_END                         =   "_h_d.jpg"
 // Identifiers
 let ID_DROP_PIN                     =   "droppablePin"
 let ID_PHOTO_CELL                   =   "photoCell"
+let ID_POP_VC                       =   "PopVC"
 
 // Notification Constants
 let NOTIF_PHOTO_DOWNLOADED          =   Notification.Name("photoDownloaded")

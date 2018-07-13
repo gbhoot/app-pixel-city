@@ -133,11 +133,10 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         collectionView?.reloadData()
     }
     
-    func removeSpinner() {
-        if spinner != nil {
-            spinner?.stopAnimating()
-            pullUpView.willRemoveSubview(spinner!)
-            spinner?.removeFromSuperview()
+    func removeCollectionView() {
+        if collectionView != nil {
+            pullUpView.willRemoveSubview(collectionView!)
+            collectionView?.removeFromSuperview()
         }
     }
     
@@ -148,10 +147,11 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
-    func removeCollectionView() {
-        if collectionView != nil {
-            pullUpView.willRemoveSubview(collectionView!)
-            collectionView?.removeFromSuperview()
+    func removeSpinner() {
+        if spinner != nil {
+            spinner?.stopAnimating()
+            pullUpView.willRemoveSubview(spinner!)
+            spinner?.removeFromSuperview()
         }
     }
     
@@ -159,6 +159,7 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func currentLocationBtnPressed(_ sender: Any) {
         if authorizationStatus == .authorizedAlways || authorizationStatus == .authorizedWhenInUse {
             centerMapOnUserLocation()
+            animateViewDown()
         }
     }
 }
@@ -221,6 +222,7 @@ extension MapVC: MKMapViewDelegate {
         removePin()
         removeSpinner()
         removeProgressLbl()
+        removeCollectionView()
     }
     
     func removePin() {
@@ -267,6 +269,12 @@ extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
         let imageView = UIImageView(image: imageFromIndex)
         cell.addSubview(imageView)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let popVC = storyboard?.instantiateViewController(withIdentifier: ID_POP_VC) as? PopVC else { return }
+        popVC.initData(forImage: PhotoService.instance.imageArray[indexPath.row])
+        present(popVC, animated: true, completion: nil)
     }
 }
 
