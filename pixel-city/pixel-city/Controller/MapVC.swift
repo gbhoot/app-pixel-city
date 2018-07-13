@@ -42,14 +42,6 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         configureLocationServices()
         
         addDoubleTap()
-        
-        collectionView = UICollectionView(frame: pullUpView.layer.bounds, collectionViewLayout: flowLayout)
-        collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: "photoCell")
-        collectionView?.delegate = self
-        collectionView?.dataSource = self
-        collectionView?.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
-        
-//        pullUpView.addSubview(collectionView)
     }
     
     override func didReceiveMemoryWarning() {
@@ -76,34 +68,53 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         let doubleTap = UITapGestureRecognizer(target: self, action: #selector(MapVC.dropPin(sender:)))
         doubleTap.numberOfTapsRequired = 2
         doubleTap.delegate = self
+        
         mapView.addGestureRecognizer(doubleTap)
     }
     
     func addSwipe() {
         let swipe = UISwipeGestureRecognizer(target: self, action: #selector(MapVC.animateViewDown))
         swipe.direction = .down
+        
         pullUpView.addGestureRecognizer(swipe)
     }
     
     func addSpinner() {
         spinner = UIActivityIndicatorView()
         spinner?.center = CGPoint(x: (pullUpView.layer.bounds.width / 2) - ((spinner?.frame.width)! / 2), y: (pullUpView.layer.bounds.height / 2) - ((spinner?.frame.height)! / 2))
-//        print("\(pullUpView.layer.bounds.width), \(pullUpView.layer.bounds.height)")
         spinner?.activityIndicatorViewStyle = .whiteLarge
         spinner?.color = #colorLiteral(red: 0.05882352963, green: 0.180392161, blue: 0.2470588237, alpha: 1)
         spinner?.startAnimating()
+        
         pullUpView.addSubview(spinner!)
-//        print(spinner?.frame.origin as Any)
     }
     
     func addProgressLbl() {
         progressLbl = UILabel()
         progressLbl?.frame = CGRect(x: (pullUpView.layer.bounds.width / 2) - CGFloat(PULL_UP_VIEW_LBL_WIDTH / 2), y: (pullUpView.layer.bounds.height / 2) + CGFloat(PULL_UP_VIEW_LBL_HEIGHT / 2), width: CGFloat(PULL_UP_VIEW_LBL_WIDTH), height: CGFloat(PULL_UP_VIEW_LBL_HEIGHT))
-        progressLbl?.font = UIFont(name: "Avenir", size: 18)
+        progressLbl?.font = UIFont(name: AVENIR_FONT, size: 18)
         progressLbl?.textColor = #colorLiteral(red: 0.06274510175, green: 0, blue: 0.1921568662, alpha: 1)
         progressLbl?.textAlignment = .center
-        progressLbl?.text = "12/40 PHOTOS LOADED"
+        progressLbl?.text = "12/\(NUM_OF_PHOTOS) PHOTOS LOADED"
+
         pullUpView.addSubview(progressLbl!)
+    }
+    
+    func addCollectionView() {
+//        let collectionFrame = CGRect(x: 0.0, y:0.0, width: pullUpView.layer.frame.width, height: pullUpView.layer.frame.height)
+//        print(pullUpView.layer.bounds)
+//        collectionView = UICollectionView(frame: collectionFrame, collectionViewLayout: flowLayout)
+        
+        removeSpinner()
+        removeProgressLbl()
+        
+        collectionView = UICollectionView(frame: pullUpView.layer.bounds, collectionViewLayout: flowLayout)
+        collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: ID_PHOTO_CELL)
+        collectionView?.delegate = self
+        collectionView?.dataSource = self
+        collectionView?.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+        
+        pullUpView.addSubview(collectionView!)
     }
     
     func removeSpinner() {
@@ -136,7 +147,7 @@ extension MapVC: MKMapViewDelegate {
             return nil
         }
         
-        let pinAnnotation = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "droppablePin")
+        let pinAnnotation = MKPinAnnotationView(annotation: annotation, reuseIdentifier: ID_DROP_PIN)
         pinAnnotation.pinTintColor = #colorLiteral(red: 0.9647058824, green: 0.6509803922, blue: 0.137254902, alpha: 1)
         pinAnnotation.animatesDrop = true
         
@@ -157,8 +168,17 @@ extension MapVC: MKMapViewDelegate {
         let touchPoint = sender.location(in: mapView)
         let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
         
-        let annotation = DroppablePin(coordinate: touchCoordinate, identifier: "droppablePin")
+        let annotation = DroppablePin(coordinate: touchCoordinate, identifier: ID_DROP_PIN)
         mapView.addAnnotation(annotation)
+        
+        PhotoService.instance.getURLs(forAnnotation: annotation) { (success) in
+            if success {
+                print(PhotoService.instance.photoURLArray)
+//                self.addCollectionView()
+            } else {
+                
+            }
+        }
         
         setRegion(coordinate: touchCoordinate)
     }
@@ -167,6 +187,7 @@ extension MapVC: MKMapViewDelegate {
         addSwipe()
         addSpinner()
         addProgressLbl()
+//        addCollectionView()
     }
     
     func removeOutletInstances() {
@@ -214,7 +235,7 @@ extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ID_PHOTO_CELL, for: indexPath) as? PhotoCell
         return cell!
     }
 }

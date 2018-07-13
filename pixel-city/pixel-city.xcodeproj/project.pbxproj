@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02690B8020F91D320040C5FD /* PhotoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02690B7F20F91D320040C5FD /* PhotoService.swift */; };
 		027F882320F81B8000B3570C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027F882220F81B8000B3570C /* AppDelegate.swift */; };
 		027F882520F81B8000B3570C /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027F882420F81B8000B3570C /* MapVC.swift */; };
 		027F882820F81B8000B3570C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 027F882620F81B8000B3570C /* Main.storyboard */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		02690B7F20F91D320040C5FD /* PhotoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoService.swift; sourceTree = "<group>"; };
 		027F881F20F81B8000B3570C /* pixel-city.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "pixel-city.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		027F882220F81B8000B3570C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		027F882420F81B8000B3570C /* MapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVC.swift; sourceTree = "<group>"; };
@@ -46,6 +48,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		02690B7E20F91CD70040C5FD /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				02690B7F20F91D320040C5FD /* PhotoService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		027F881620F81B8000B3570C = {
 			isa = PBXGroup;
 			children = (
@@ -67,6 +77,7 @@
 		027F882120F81B8000B3570C /* pixel-city */ = {
 			isa = PBXGroup;
 			children = (
+				02690B7E20F91CD70040C5FD /* Services */,
 				027F883820F81BCD00B3570C /* Utilities */,
 				027F883720F81BC500B3570C /* Extensions */,
 				027F883620F81BB500B3570C /* Model */,
@@ -253,6 +264,7 @@
 			files = (
 				027F882520F81B8000B3570C /* MapVC.swift in Sources */,
 				0292636B20F84B4300693E65 /* PhotoCell.swift in Sources */,
+				02690B8020F91D320040C5FD /* PhotoService.swift in Sources */,
 				0292636920F82EEE00693E65 /* DroppablePin.swift in Sources */,
 				027F882320F81B8000B3570C /* AppDelegate.swift in Sources */,
 				0292636720F8288C00693E65 /* Constants.swift in Sources */,
